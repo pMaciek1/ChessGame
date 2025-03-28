@@ -8,46 +8,87 @@ pygame.display.set_caption('Chess')
 
 timer = pygame.time.Clock()
 
-class Piece:
-    value_of_pieces = {'King': 0, 'Pawn': 1, 'Knight': 3, 'Bishop': 3, 'Rook': 5, 'Queen': 9}
-    image_of_white_pieces = {'King': 'pieces/w_king.png', 'Pawn': 'pieces/w_pawn.png', 'Knight': 'pieces/w_horse.png',
-                             'Bishop': 'pieces/w_bishop.png', 'Rook': 'pieces/w_rook.png', 'Queen': 'pieces/w_queen.png'}
-    image_of_black_pieces = {'King': 'pieces/b_king.png', 'Pawn': 'pieces/b_pawn.png', 'Knight': 'pieces/b_horse.png',
-                             'Bishop': 'pieces/b_bishop.png', 'Rook': 'pieces/b_rook.png', 'Queen': 'pieces/b_queen.png'}
-    def __init__(self, name: str, is_white: bool):
-        self.name = name
-        self.is_white = is_white
-        self.value = self.value_of_pieces[name]
-        self.image = self.image_of_white_pieces[name] if is_white else self.image_of_black_pieces[name]
+
+board = [[' ' for _ in range(8)] for _ in range(8)]
 
 
 
-white_pawn = Piece('Pawn', True)
-black_pawn = Piece('Pawn', False)
-white_knight = Piece('Knight', True)
-black_knight = Piece('Knight', False)
-white_bishop = Piece('Bishop', True)
-black_bishop = Piece('Bishop', False)
-white_queen = Piece('Queen', True)
-black_queen = Piece('Queen', False)
-white_king = Piece('King', True)
-black_king = Piece('King', False)
+bp_img = pygame.image.load('pieces/black-pawn.png').convert_alpha()
+wp_img = pygame.image.load('pieces/white-pawn.png').convert_alpha()
+br_img = pygame.image.load('pieces/black-rook.png').convert_alpha()
+wr_img = pygame.image.load('pieces/white-rook.png').convert_alpha()
+bb_img = pygame.image.load('pieces/black-bishop.png').convert_alpha()
+wb_img = pygame.image.load('pieces/white-bishop.png').convert_alpha()
+bq_img = pygame.image.load('pieces/black-queen.png').convert_alpha()
+wq_img = pygame.image.load('pieces/white-queen.png').convert_alpha()
+bn_img = pygame.image.load('pieces/black-knight.png').convert_alpha()
+wn_img = pygame.image.load('pieces/white-knight.png').convert_alpha()
+bk_img = pygame.image.load('pieces/black-king.png').convert_alpha()
+wk_img = pygame.image.load('pieces/white-king.png').convert_alpha()
+
 
 def init_board() -> None:
     for i in range(8):
+        board[1][i] = 'bp'
+        board[6][i] = 'wp'
+    board[0][0] = 'br'
+    board[0][7] = 'br'
+    board[0][1] = 'bn'
+    board[0][6] = 'bn'
+    board[0][2] = 'bb'
+    board[0][5] = 'bb'
+    board[0][3] = 'bq'
+    board[0][4] = 'bk'
+
+    board[7][0] = 'wr'
+    board[7][7] = 'wr'
+    board[7][1] = 'wn'
+    board[7][6] = 'wn'
+    board[7][2] = 'wb'
+    board[7][5] = 'wb'
+    board[7][3] = 'wq'
+    board[7][4] = 'wk'
+
+def draw_board() -> None:
+    for i in range(8):
         for j in range(8):
             if (i+j) % 2 == 1:
-                pygame.draw.rect(screen, (0, 0, 0), pygame.Rect((100 * i) + 100, (100 * j) + 50, 100, 100))
+                pygame.draw.rect(screen, (55, 55, 55), pygame.Rect((100 * i) + 100, (100 * j) + 50, 100, 100))
             else:
-                pygame.draw.rect(screen, (255, 255, 255), pygame.Rect((100 * i) + 100, (100 * j) + 50, 100, 100))
-            if i == 1:
-                print(black_pawn.image)
+                pygame.draw.rect(screen, (200, 200, 200), pygame.Rect((100 * i) + 100, (100 * j) + 50, 100, 100))
+    for line_index, line in enumerate(board):
+        for square_index, square in enumerate(line):
+            if square == 'bp':
+                screen.blit(bp_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wp':
+                screen.blit(wp_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'br':
+                screen.blit(br_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wr':
+                screen.blit(wr_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'bn':
+                screen.blit(bn_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wn':
+                screen.blit(wn_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'bb':
+                screen.blit(bb_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wb':
+                screen.blit(wb_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'bq':
+                screen.blit(bq_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wq':
+                screen.blit(wq_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'bk':
+                screen.blit(bk_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'wk':
+                screen.blit(wk_img, ((100 * square_index) + 100, (100 * line_index) + 50))
 
+init_board()
 running =  True
 while running:
     timer.tick(60)
     screen.fill((128, 128, 128))
-    init_board()
+    draw_board()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
