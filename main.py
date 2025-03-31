@@ -83,8 +83,30 @@ def draw_board() -> None:
             elif square == 'wk':
                 screen.blit(wk_img, ((100 * square_index) + 100, (100 * line_index) + 50))
 
+def choose_piece(pos_x: float, pos_y:float, is_white: bool) -> str:
+    try:
+        buf = board[int((pos_y-50)/100)][int((pos_x-100)/100)]
+    except IndexError:
+        buf = ' '
+    if is_white and buf.find('w') == 0:
+        return buf
+    elif not is_white and buf.find('b') == 0:
+        return buf
+    else:
+        return ''
+
+def drop_piece(pos_x: float, pos_y: float, old_x: float, old_y: float, piece: str) -> None:
+    board[int((old_y - 50) / 100)][int((old_x - 100) / 100)] = ' '
+    board[int((pos_y - 50) / 100)][int((pos_x - 100) / 100)] = piece
+
 init_board()
+
 running =  True
+move = False
+is_white_turn = True
+
+
+
 while running:
     timer.tick(60)
     screen.fill((128, 128, 128))
@@ -92,5 +114,17 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if not move:
+                pick_up_piece = choose_piece(x, y, is_white_turn)
+                if not pick_up_piece == '':
+                    xx = x
+                    yy = y
+                    move = not move
+            else:
+                drop_piece(x, y, xx, yy, pick_up_piece)
+                is_white_turn = not is_white_turn
+                move = not move
     pygame.display.flip()
 pygame.quit()
