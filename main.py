@@ -1,5 +1,5 @@
 import pygame
-import os
+import moves
 
 pygame.init()
 
@@ -48,6 +48,7 @@ def init_board() -> None:
     board[7][5] = 'wb'
     board[7][3] = 'wq'
     board[7][4] = 'wk'
+    board[4][4] = 'wr'
 
 def draw_board() -> None:
     for i in range(8):
@@ -82,29 +83,46 @@ def draw_board() -> None:
                 screen.blit(bk_img, ((100 * square_index) + 100, (100 * line_index) + 50))
             elif square == 'wk':
                 screen.blit(wk_img, ((100 * square_index) + 100, (100 * line_index) + 50))
+            elif square == 'mv':
+                pygame.draw.circle(screen, (255, 0, 0), ((100 * square_index) + 150, (100 * line_index) + 100), 10)
 
 def choose_piece(pos_x: float, pos_y:float, is_white: bool) -> str:
     try:
         buf = board[int((pos_y-50)/100)][int((pos_x-100)/100)]
+        print(f'x: {[int((pos_y-50)/100)]}, y: {[int((pos_x-100)/100)]}')
     except IndexError:
         buf = ' '
     if is_white and buf.find('w') == 0:
+        if buf == 'wp':
+            moves.w_pawn(int((pos_y-50)/100), int((pos_x-100)/100), board)
+        elif buf == 'wr':
+            moves.rook(int((pos_y-50)/100), int((pos_x-100)/100), board)
         return buf
     elif not is_white and buf.find('b') == 0:
+        if buf == 'bp':
+            moves.b_pawn(int((pos_y-50)/100), int((pos_x-100)/100), board)
         return buf
     else:
         return ''
 
-def drop_piece(pos_x: float, pos_y: float, old_x: float, old_y: float, piece: str) -> None:
-    board[int((old_y - 50) / 100)][int((old_x - 100) / 100)] = ' '
-    board[int((pos_y - 50) / 100)][int((pos_x - 100) / 100)] = piece
+def drop_piece(pos_x: float, pos_y: float, old_x: float, old_y: float, piece: str) -> bool:
+    if board[int((pos_y - 50) / 100)][int((pos_x - 100) / 100)] == 'mv':
+        board[int((old_y - 50) / 100)][int((old_x - 100) / 100)] = ' '
+        board[int((pos_y - 50) / 100)][int((pos_x - 100) / 100)] = piece
+        for line_index, line in enumerate(board):
+            for square_index, square in enumerate(line):
+                if square == 'mv':
+                    board[line_index][square_index] = ''
+        return True
+    return False
+
 
 init_board()
 
 running =  True
 move = False
 is_white_turn = True
-
+is_legal_move = False
 
 
 while running:
@@ -116,15 +134,20 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
+            print(f'x: {x}, y: {y}')
             if not move:
                 pick_up_piece = choose_piece(x, y, is_white_turn)
                 if not pick_up_piece == '':
+                    print('picked up piece')
                     xx = x
                     yy = y
                     move = not move
             else:
-                drop_piece(x, y, xx, yy, pick_up_piece)
-                is_white_turn = not is_white_turn
-                move = not move
+                is_legal_move = drop_piece(x, y, xx, yy, pick_up_piece)
+                print('trying to drop piece, is legal move?' + str(is_legal_move))
+                if is_legal_move:
+                    print('legal move')
+                    is_white_turn = not is_white_turn
+                    move = not move
     pygame.display.flip()
 pygame.quit()
