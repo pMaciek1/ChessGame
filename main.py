@@ -48,7 +48,7 @@ def init_board() -> None:
     board[7][5] = 'wb'
     board[7][3] = 'wq'
     board[7][4] = 'wk'
-    board[4][4] = 'wr'
+    board[4][4] = 'wb'
 
 def draw_board() -> None:
     for i in range(8):
@@ -97,6 +97,8 @@ def choose_piece(pos_x: float, pos_y:float, is_white: bool) -> str:
             moves.w_pawn(int((pos_y-50)/100), int((pos_x-100)/100), board)
         elif buf == 'wr':
             moves.rook(int((pos_y-50)/100), int((pos_x-100)/100), board)
+        elif buf == 'wb':
+            moves.bishop(int((pos_y-50)/100), int((pos_x-100)/100), board)
         return buf
     elif not is_white and buf.find('b') == 0:
         if buf == 'bp':
@@ -112,7 +114,7 @@ def drop_piece(pos_x: float, pos_y: float, old_x: float, old_y: float, piece: st
         for line_index, line in enumerate(board):
             for square_index, square in enumerate(line):
                 if square == 'mv':
-                    board[line_index][square_index] = ''
+                    board[line_index][square_index] = ' '
         return True
     return False
 
