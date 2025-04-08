@@ -2,8 +2,6 @@ from typing import List
 
 def w_pawn(board_y: int, board_x: int, board: List[List[str]]):
     try:
-        # allow to move two squares forward if first move - done
-        # allow to move one square forward - done
         if board[board_y-1][board_x] == ' ':
             board[board_y-1][board_x] = 'mv'
             if board_y == 6 and board[board_y-2][board_x] == ' ':
@@ -57,15 +55,99 @@ def bishop(board_y: int, board_x: int, board: List[List[str]]) -> None:
         if not board[x][x] == ' ':
             break
         board[x][x] = 'mv'
-    #todo add two more diagonals
+    for x in range(max(board_y, board_x)+1, 8):
+        if not board[x][8-x] == ' ':
+            break
+        board[x][8-x] = 'mv'
+    for x in range(max(board_y, board_x)+1, 8):
+        if not board[8-x][x] == ' ':
+            break
+        board[8-x][x] = 'mv'
 
-def knight(board_y: int, board_x: int, board: List[List[str]]) -> List[List[str]]:
-    pass
+def knight(board_y: int, board_x: int, board: List[List[str]]):
+    try:
+        if board[board_y + 1][board_x + 2] == ' ':
+            board[board_y + 1][board_x + 2] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y - 1][board_x + 2] == ' ':
+            board[board_y - 1][board_x + 2] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y + 1][board_x - 2] == ' ':
+            board[board_y + 1][board_x - 2] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y - 1][board_x - 2] == ' ':
+            board[board_y - 1][board_x - 2] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y + 2][board_x + 1] == ' ':
+            board[board_y + 2][board_x + 1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y - 2][board_x + 1] == ' ':
+            board[board_y - 2][board_x + 1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y + 2][board_x - 1] == ' ':
+            board[board_y + 2][board_x - 1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y - 2][board_x - 1] == ' ':
+            board[board_y - 2][board_x - 1] = 'mv'
+    except IndexError:
+        pass
 
-def king(board_y: int, board_x: int, board: List[List[str]]) -> List[List[str]]:
-    pass
+def king(board_y: int, board_x: int, board: List[List[str]]):
+    try:
+        if board[board_y-1][board_x-1] == ' ':
+            board[board_y-1][board_x-1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y-1][board_x] == ' ':
+            board[board_y-1][board_x] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y][board_x-1] == ' ':
+            board[board_y][board_x-1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y+1][board_x+1] == ' ':
+            board[board_y+1][board_x+1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y+1][board_x] == ' ':
+            board[board_y+1][board_x] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y][board_x+1] == ' ':
+            board[board_y][board_x+1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y+1][board_x-1] == ' ':
+            board[board_y+1][board_x-1] = 'mv'
+    except IndexError:
+        pass
+    try:
+        if board[board_y-1][board_x+1] == ' ':
+            board[board_y-1][board_x+1] = 'mv'
+    except IndexError:
+        pass
 
-def queen(board_y: int, board_x: int, board: List[List[str]]) -> List[List[str]]:
-    #rook(square)
-    #bishop(square)
-    pass
+def queen(board_y: int, board_x: int, board: List[List[str]]):
+    rook(board_y, board_x, board)
+    bishop(board_y, board_x, board)

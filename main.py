@@ -48,7 +48,7 @@ def init_board() -> None:
     board[7][5] = 'wb'
     board[7][3] = 'wq'
     board[7][4] = 'wk'
-    board[4][4] = 'wb'
+    board[4][4] = 'wk'
 
 def draw_board() -> None:
     for i in range(8):
@@ -99,6 +99,12 @@ def choose_piece(pos_x: float, pos_y:float, is_white: bool) -> str:
             moves.rook(int((pos_y-50)/100), int((pos_x-100)/100), board)
         elif buf == 'wb':
             moves.bishop(int((pos_y-50)/100), int((pos_x-100)/100), board)
+        elif buf == 'wq':
+            moves.queen(int((pos_y-50)/100), int((pos_x-100)/100), board)
+        elif buf == 'wn':
+            moves.knight(int((pos_y-50)/100), int((pos_x-100)/100), board)
+        elif buf == 'wk':
+            moves.king(int((pos_y-50)/100), int((pos_x-100)/100), board)
         return buf
     elif not is_white and buf.find('b') == 0:
         if buf == 'bp':
